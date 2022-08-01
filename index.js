@@ -4,6 +4,7 @@ let up;    // 空白ピース基準で 1 つ上のピースの場所を記録
 let down;  // 空白ピース基準で 1 つ下のピースの場所を記録
 let left;  // 空白ピース基準で 1 つ左のピースの場所を記録
 let right; // 空白ピース基準で 1 つ右のピースの場所を記録
+let count=0;// クリック数を記録
 
 // 各ピースの場所を記録
 let positions = [
@@ -13,6 +14,12 @@ let positions = [
   15, 14, 12, 16,
 ];
 
+function randomizePositions(array){
+  for (var i = array.length; 1 < i; i--) {
+      var k = Math.floor(Math.random() * i);
+      [array[k], array[i - 1]] = [array[i - 1], array[k]];
+  }
+}
 
 // 空白ピースを基準に、上下左右のピースの場所を調べる関数
 // ----------------------------------------------------------------------------
@@ -44,14 +51,26 @@ function component() {
 
     piece.style.order = positions[n];
   }
+  document.getElementById('count').innerHTML = "Crick"+count+"されました" ;
 }
-
 
 // 初期化処理
 // ----------------------------------------------------------------------------
+randomizePositions(positions);
 component();
 calcAdjacentPositions();
 
+//配列の要素の順番を確認する関数
+function isFinished(array){
+  for(var i = 0; (array.length - 1) > i; i++){
+    if (i+1!=array[i]){
+      return false;
+    }
+    if (array[i]==(array.length - 1)){
+      return true;
+    }
+  }
+}
 
 // ピースがクリックされたときに実行する処理 (関数)
 // ----------------------------------------------------------------------------
@@ -69,10 +88,17 @@ function pieceClickHandler(event) {
     [ positions[15], positions[N - 1] ] = [ positions[N - 1], positions[15] ];
 
     // State => View の反映を行う
+    count++;
     component();
 
     // 隣接するピースを再計算する
-    calcAdjacentPositions(); 
+    calcAdjacentPositions();
+  }
+  //クリアした時に，アラートを表示（OKを押すとリロード）
+  if(isFinished(positions)==true){
+    window.alert("手数"+count+"でクリアおめでとう！");
+    window.alert("Restart!!");
+    document.location.reload();
   }
 }
 
@@ -81,6 +107,5 @@ function pieceClickHandler(event) {
 // ----------------------------------------------------------------------------
 for (let n = 1; n <= 15; n = n + 1) {
   const piece = document.querySelector('.piece-' + n);
-
   piece.addEventListener('click', pieceClickHandler);
 }

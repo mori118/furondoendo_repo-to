@@ -5,8 +5,8 @@
 }
 
 .piece {
-  background: #00BBDD;
-  color: #FFFFFF;
+  background: #25dd00;
+  color: #ffffff;
   margin: 10px;
   padding: 10px;
   width: 30px;
@@ -23,3 +23,4 @@
 .piece-16 {
   visibility: hidden;
 }
+
